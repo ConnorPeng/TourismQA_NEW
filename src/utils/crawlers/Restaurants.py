@@ -43,6 +43,8 @@ class Parser:
         return item
 
 class Crawler(scrapy.Spider):
+    name = 'restaurants_crawler'
+
     def __init__(self, items):
         self.items = items
         self.parser = Parser()

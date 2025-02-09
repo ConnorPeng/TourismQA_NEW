@@ -19,8 +19,16 @@ class Processor:
 
         ordered_item["title"] = self.processString(item["title"])
         ordered_item["description"] = self.processString(item["description"])
-        ordered_item["rating"] = float(item["rating"])
-        ordered_item["date"] = dateparser.parse(item["date"].strip(), date_formats = ["%d %B %Y", "%B %d, %Y", "%Y-%m-%d"]).strftime("%d %B %Y")
+        try:
+            ordered_item["rating"] = float(item["rating"]) if item["rating"] else 0.0
+        except (ValueError, TypeError):
+            ordered_item["rating"] = 0.0
+            
+        try:
+            ordered_item["date"] = dateparser.parse(item["date"].strip(), date_formats = ["%d %B %Y", "%B %d, %Y", "%Y-%m-%d"]).strftime("%d %B %Y")
+        except (AttributeError, TypeError):
+            ordered_item["date"] = ""
+            
         ordered_item["url"] = self.processString(item["url"])
 
         return ordered_item
@@ -33,12 +41,29 @@ class Processor:
         ordered_item["properties"] = list(filter(lambda x: x != "", list(map(self.processString, item["properties"]))))
         ordered_item["description"] = self.processString(item["description"])
         ordered_item["address"] = self.processString(item["address"])
-        ordered_item["latitude"] = float(item["latitude"])
-        ordered_item["longitude"] = float(item["longitude"])
-        ordered_item["rating"] = float(item["rating"])
+        
+        # Add error handling for numeric conversions
+        try:
+            ordered_item["latitude"] = float(item["latitude"]) if item["latitude"] else 0.0
+        except (ValueError, TypeError):
+            ordered_item["latitude"] = 0.0
+            
+        try:
+            ordered_item["longitude"] = float(item["longitude"]) if item["longitude"] else 0.0
+        except (ValueError, TypeError):
+            ordered_item["longitude"] = 0.0
+            
+        try:
+            ordered_item["rating"] = float(item["rating"]) if item["rating"] else 0.0
+        except (ValueError, TypeError):
+            ordered_item["rating"] = 0.0
+            
         ordered_item["url"] = self.processString(item["url"])
         ordered_item["reviews"] = []
         for review in item["reviews"]:
-            ordered_item["reviews"].append(self.processReviewItem(review))
+            try:
+                ordered_item["reviews"].append(self.processReviewItem(review))
+            except Exception:
+                continue
 
         return ordered_item
