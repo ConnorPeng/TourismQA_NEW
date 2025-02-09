@@ -1,10 +1,8 @@
-json
 tqdm
 nltk
 numpy
 scipy
 scrapy
-urllib
 dateparser
 fuzzywuzzy
 BeautifulSoup4
