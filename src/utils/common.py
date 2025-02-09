@@ -3,7 +3,7 @@ import pickle
 from pathlib import Path
 
 def getProjectRootPath() -> Path:
-    return Path(__file__).parent.parent
+    return Path(__file__).parent.parent.parent
 
 def create(path) -> None:
     path = Path(path)
@@ -31,4 +31,4 @@ def update(d, u):
                         d[k].append(e)
             else:
                 d[k] = v
-    return d
+    return d 
